@@ -1,0 +1,49 @@
+﻿@model CaseItauWeb.Models.FundoModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "_Layout";
+}
+@{
+    ViewData["Title"] = "Create";
+}
+
+    <h2>Cadastro de novos fundos</h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Register" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Nome" class="control-label">Nome</label>
+                    <input asp-for="Nome" class="form-control" />
+                    <span asp-validation-for="Nome" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Cnpj" class="control-label">Cnpj</label>
+                    <input asp-for="Cnpj" class="form-control" />
+                    <span asp-validation-for="Cnpj" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Patrimonio" class="control-label">Patrimonio</label>
+                    <input asp-for="Patrimonio" class="form-control" />
+                    <span asp-validation-for="Patrimonio" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CodigoTipo.NomeTipo" class="control-label">Tipo</label>
+                    <input asp-for="CodigoTipo.NomeTipo" class="form-control" />
+                    <span asp-validation-for="CodigoTipo.NomeTipo" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Registrar" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-controle="Register" asp-action="Index">@Html.ActionLink("Retornar", "Index", new { /* id=item.PrimaryKey */ })</a>
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
