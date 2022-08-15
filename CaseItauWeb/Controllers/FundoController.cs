@@ -1,5 +1,6 @@
 ﻿using CaseItauWeb.DAL;
 using CaseItauWeb.Models;
+using CaseItauWeb.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -19,9 +20,15 @@ namespace CaseItauWeb.Controllers
                 var getFundos = _fundoDAL.GetAllFundos();
                 return View(getFundos);
             }
+            catch (ArgumentException ex)
+            {
+                ViewBag.Alert = ex.Message;
+                return View();
+            }
             catch (Exception ex)
             {
-                return RedirectToAction("Index");
+                ViewBag.Alert = Constants.Error();
+                return View();
             }
         }
 
@@ -34,28 +41,46 @@ namespace CaseItauWeb.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public ActionResult Register(FundoModel fundo)
         {
-            _fundoDAL.RegisterFundo(fundo);
-            return RedirectToAction("Index");
+            try
+            {
+                if (!ModelState.IsValid)
+                    return View();
+                _fundoDAL.RegisterFundo(fundo);
+                return RedirectToAction("Index");
+            }
+            catch (ArgumentException ex)
+            {
+                ViewBag.Alert = ex.Message;
+                return View("Index");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Alert = Constants.Error();
+                return View("Index");
+            }
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+
+        public ActionResult Edit(int id)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                var result = _fundoDAL.GetFundo(id.ToString());
+                return View(result);
             }
-            catch
+            catch (ArgumentException ex)
             {
-                return View();
+                ViewBag.Alert = ex.Message;
+                return View("Index");
             }
-        }
-        public ActionResult Edit(int id)
-        {
-            return View();
+            catch (Exception ex)
+            {
+                ViewBag.Alert = Constants.Error();
+                return View("Index");
+            }
         }
 
         [HttpPost]
@@ -63,13 +88,22 @@ namespace CaseItauWeb.Controllers
         {
             try
             {
-
-                _fundoDAL.UpdateFundo(id.ToString(), fundo);
-                return RedirectToAction("Index");
+                if (!ModelState.IsValid)
+                    return View();
+                if (_fundoDAL.UpdateFundo(id.ToString(), fundo))
+                    return RedirectToAction("Index");
+                else
+                    throw new ArgumentException(Constants.FundsNotUpdate());
             }
-            catch
+            catch (ArgumentException ex)
             {
-                return RedirectToAction("Index");
+                ViewBag.Alert = ex.Message;
+                return View("Index");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Alert = Constants.Error();
+                return View("Index");
             }
         }
 
@@ -83,22 +117,47 @@ namespace CaseItauWeb.Controllers
         {
             try
             {
-                _fundoDAL.MovePatrimony(id.ToString(), value);
-                return RedirectToAction("Index");
+                if (!ModelState.IsValid)
+                    return View();
+                if (_fundoDAL.MovePatrimony(id.ToString(), value))
+                    return RedirectToAction("Index");
+                else
+                    throw new ArgumentException(Constants.ValueNotUpdate());
+
             }
-            catch
+            catch (ArgumentException ex)
             {
-                return RedirectToAction("Index");
+                ViewBag.Alert = ex.Message;
+                return View("Index");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Alert = Constants.Error();
+                return View("Index");
             }
         }
-        // GET: FundoController/Delete/5
         public ActionResult Delete(int id)
         {
-            _fundoDAL.RemoveFundo(id.ToString());
-            return RedirectToAction("Index");
+            try
+            {
+                if (!ModelState.IsValid)
+                    return View();
+                if (_fundoDAL.RemoveFundo(id.ToString()))
+                    return RedirectToAction("Index");
+                else
+                    throw new ArgumentException(Constants.FundNotRemove());
+            }
+            catch (ArgumentException ex)
+            {
+                ViewBag.Alert = ex.Message;
+                return View("Index");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Alert = Constants.Error();
+                return View("Index");
+            }
         }
-
-        // POST: FundoController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)

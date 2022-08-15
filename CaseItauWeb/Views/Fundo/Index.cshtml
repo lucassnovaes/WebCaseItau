@@ -7,58 +7,64 @@
 }
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 <h1>Fundos Cadastrados</h1>
+@if (ViewBag.Alert != null)
+{
+    <div class="alert alert-dismissible alert-primary">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <a href="#" class="alert-link"></a> @ViewBag.Alert.
+    </div>
+    <div>
+        <a asp-action="Index">Retornar</a>
+    </div>
+}
+else
+{
+    <p>
+        @*<a href="" asp-controle="Register" asp-action="Create">Cadastrar Novo Fundo</a>*@
+        <a asp-controller="Fundo" asp-action="Create" class="btn btn-light">Cadastrar Novo Fundo</a>
 
-<p>
-    @*<a href="" asp-controle="Register" asp-action="Create">Cadastrar Novo Fundo</a>*@
-    <a asp-controller="Fundo" asp-action="Create">Cadastrar Novo Fundo</a>
-
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Codigo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Nome)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Cnpj)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Patrimonio)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CodigoTipo.NomeTipo)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Codigo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cnpj)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Patrimonio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CodigoTipo.NomeTipo)
-            </td>
-            <td>
-                @Html.ActionLink("Editar", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Alterar Patrimonio", "EditPatrimony", new { id=item.Codigo }) |
-                @Html.ActionLink("Excluir", "Delete", new { id = item.Codigo })
-            </td>
-        </tr>
-        }
-    </tbody>
-</table>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nome)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Cnpj)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Patrimonio)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CodigoTipo.NomeTipo)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cnpj)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Patrimonio)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CodigoTipo.NomeTipo)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Editar", "Edit", new { id = item.Codigo }) |
+                        @Html.ActionLink("Alterar Patrimonio", "EditPatrimony", new { id = item.Codigo }) |
+                        @Html.ActionLink("Excluir", "Delete", new { id = item.Codigo })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
